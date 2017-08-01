@@ -1,3 +1,5 @@
+Note: See [Netflix/chaosmonkey](https://github.com/Netflix/chaosmonkey) for a newer version of Chaos Monkey.
+
 ## What is Chaos Monkey?
 
 Chaos Monkey is a service which identifies groups of systems and randomly terminates one of the systems in a group. The service operates at a controlled time (does not run on weekends and holidays) and interval (only operates during business hours). In most cases we have designed our applications to continue working when a peer goes offline, but in those special cases we want to make sure there are people around to resolve and learn from any problems. With this in mind Chaos Monkey only runs in business hours with the intent that engineers will be alert and able to respond.
