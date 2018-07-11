@@ -159,7 +159,7 @@ To ensure that the domain was created
 
 If this method does not work for you, try using the shell function below.
 
-### Using a Shell function
+#### Using a Shell function
 
 There does not appear to be a simple free toolset offered by Amazon for SimpleDB interaction.  Here is a shell function that does most of what is needed for our setup.  For some reason the signature generation does not seem to work reliably, so if you get an error from the SimpleDB service, try it a few times.
 ```shell
