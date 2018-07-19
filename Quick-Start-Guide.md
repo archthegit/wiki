@@ -13,7 +13,7 @@ If you prefer to use the old tools:
     $ wget http://ec2-downloads.s3.amazonaws.com/AutoScaling-2011-01-01.zip
     $ unzip AutoScaling-2011-01-01.zip
     $ cd AutoScaling-1.0.61.0/
-    $ export AWS_AUTO_SCALING_HOME=`pwd` 
+    $ export AWS_AUTO_SCALING_HOME=`pwd`
 ```
 
 Instructions for both are provided.
@@ -47,7 +47,7 @@ aws autoscaling create-launch-configuration --launch-configuration-name lc1 --in
 --keyname <keyname> is optional, but recommended if you want to SSH into your instances.
 
 Using the old CLI:
-```shell 
+```shell
     $ $AWS_AUTO_SCALING_HOME/bin/as-create-launch-config lc1 --instance-type t1.micro -I $ACCOUNT_KEY -S $SECRET_KEY --image-id ami-fcf27fcc
     OK-Created launch config
 ```
@@ -98,7 +98,7 @@ Monkeys within the SimianArmy require permissions to a set of actions. The easie
         "ec2:DescribeVolumes",
         "ec2:TerminateInstances",
         "ses:SendEmail",
-        "elasticloadbalancing:*"  
+        "elasticloadbalancing:*"
       ],
       "Effect": "Allow",
       "Resource": "*"
@@ -142,6 +142,25 @@ If you prefer using Instance Roles to set your access policy, you can do so by l
 
 With a recent code merge, the SimpleDB should now be created automatically.  However, if you do need to create it manually for some reason, here is how to do so.
 
+#### Using AWS CLI
+
+AWS CLI now supports SimpleDB. To enable this service
+```shell
+    $ aws configure set preview.sdb true
+```
+To create a domain (here the domain name is SIMIAN_ARMY, you can change it)
+```shell
+    $ aws sdb create-domain SIMIAN_ARMY
+```
+To ensure that the domain was created
+```shell
+    $ aws sdb list-domains
+```
+
+If this method does not work for you, try using the shell function below.
+
+#### Using a Shell function
+
 There does not appear to be a simple free toolset offered by Amazon for SimpleDB interaction.  Here is a shell function that does most of what is needed for our setup.  For some reason the signature generation does not seem to work reliably, so if you get an error from the SimpleDB service, try it a few times.
 ```shell
     $ sdb() {
@@ -166,7 +185,7 @@ Now use the sdb function to create the necessary SIMIAN_ARMY domain
     $ sdb CreateDomain SIMIAN_ARMY
     <?xml version="1.0"?>
     <CreateDomainResponse xmlns="http://sdb.amazonaws.com/doc/2009-04-15/"><ResponseMetadata><RequestId>XXXXXXXX</RequestId><BoxUsage>X.XXXXXXX</BoxUsage></ResponseMetadata></CreateDomainResponse>
-    
+
     $ sdb ListDomains
     <?xml version="1.0"?>
     <ListDomainsResponse xmlns="http://sdb.amazonaws.com/doc/2009-04-15/"><ListDomainsResult><DomainName>SIMIAN_ARMY</DomainName></ListDomainsResult><ResponseMetadata><RequestId>XXXXXXXX</RequestId><BoxUsage>X.XXXXXXXXX</BoxUsage></ResponseMetadata></ListDomainsResponse>
@@ -174,7 +193,7 @@ Now use the sdb function to create the necessary SIMIAN_ARMY domain
 * **Note:** If you are not using the us-west-2 region then you will need to change the SimpleDB URI in the above sdb function to correspond to your region.  See [this document](http://docs.amazonwebservices.com/general/latest/gr/rande.html#sdb_region) for SimpleDB Region endpoints.
 * **Note:** The sdb function above is a hack, it sort of works most of the time.  If you know of a better way to create a SimpleDB table, then use it.  [Asgard](http://techblog.netflix.com/2012/06/asgard-web-based-cloud-management-and.html) allows you to trivially create SimpleDB tables.
 
-## Setup Simple Email Service account 
+## Setup Simple Email Service account
 If you want to receive email notifications then you need to use a validated email account in SES. Using the console setup and validate any to/from email addresses or validate your domain for the us-east-1 region.
 
 * **Note:** The scripts currently send email through us-east-1 even if your configuration is changed to a different region.
@@ -213,7 +232,7 @@ If you want to receive email notifications then you need to use a validated emai
     :test
     :check
     :build
-    
+
     BUILD SUCCESSFUL
     Total time: 43.294 secs
 ```
@@ -345,7 +364,7 @@ aws autoscaling delete-auto-scaling-group --auto-scaling-group-name monkey-targe
 Old tools:
 ```shell
     $ $AWS_AUTO_SCALING_HOME/bin/as-delete-auto-scaling-group -I $ACCOUNT_KEY -S $SECRET_KEY --auto-scaling-group monkey-target
-    
+
         Are you sure you want to delete this AutoScalingGroup? [Ny]y
     OK-Deleted AutoScalingGroup
 ```
@@ -354,13 +373,13 @@ Finally delete the *lc1* launch config we created:
 
 Old tools:
 ```shell
-aws autoscaling delete-launch-configuration --launch-configuration-name lc1 
+aws autoscaling delete-launch-configuration --launch-configuration-name lc1
 ```
 
 New tools:
 ```shell
     $ $AWS_AUTO_SCALING_HOME/bin/as-delete-launch-config lc1 -I $ACCOUNT_KEY -S $SECRET_KEY
-    
+
         Are you sure you want to delete this launch configuration? [Ny]y
     OK-Deleted launch configuration
 ```
